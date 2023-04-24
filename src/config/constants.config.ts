@@ -1,13 +1,13 @@
 export const CONSTANTS = {
-    SOCKET: {
-        EVENTS: {
-            CORE: {
-                DISCONNECT: 'disconnect',
-                CONNECT: 'connection'
-            },
-            CUSTOM: {
-                TEST: 'TEST'
-            }
-        }
+  SOCKET: {
+    EVENTS: {
+      CORE: {
+        DISCONNECT: 'disconnect',
+        CONNECT: 'connection',
+      },
+      CUSTOM: {
+        TEST: 'TEST',
+      },
     },
-}
+  },
+};
