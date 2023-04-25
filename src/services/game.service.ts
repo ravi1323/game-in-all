@@ -36,7 +36,7 @@ export class Game {
   }) {
     if (playersPerMatch < 2) throw new Error('match has to be atleast 2 players');
     if (matchDuration < 60000) throw new Error('match duration has to be atleast 1 minute');
-    if (entryFees.length < 0) throw new Error('provide a valid entry fees');
+    if (entryFees.length < 1) throw new Error('provide a valid entry fees');
     if (minimumPlayersToPlay < 2) throw new Error('minimum 2 players are required to play the game.');
 
     if (mProduction && (!key || key === '' || !cert || cert === ''))
