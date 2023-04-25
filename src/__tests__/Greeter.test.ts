@@ -1,4 +1,4 @@
-import { Greet, HttpServer, RedisClient, SocketIO } from '../index';
+import { Greet } from '../index';
 import { Server } from 'http';
 
 test("Greet", () => {

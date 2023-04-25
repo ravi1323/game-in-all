@@ -1,11 +1,12 @@
 import { Server, Socket } from 'socket.io';
 import { Server as HttpServer } from 'http';
 import { Server as HttpsServer } from 'https';
-import { CONSTANTS } from '../config/constants.config';
+import { convertStringtoObject, isJsonString, makeResponse } from '../helpers/util.helper';
 
 export class SocketIO
 {
     IO : Server | null = null;
+
     constructor({
         httpServer
     } : {
@@ -39,19 +40,28 @@ export class SocketIO
         return this.IO;
     }
 
-    async handleEvents(socket: Socket) {
-        console.log(`new socket connection established : ${socket.id}`);
-    }
+    async handleEvents(socket: Socket, handlers: object) {
+        return new Promise((resolve, reject) => {
+            
+            socket.onAny(async (eventName, value, acknowledgement) => {
+                try {
+                    
+                    if (typeof value === 'string') value = convertStringtoObject(value);
+                    const data = isJsonString(value) ? JSON.parse(value) : value;
 
-    buildMatchMaking({
-        playersPerMatch,
-        matchDuration
-    } : {
-        playersPerMatch: number,
-        matchDuration: number
-    }) : void {
-        this.IO.on(CONSTANTS.SOCKET.EVENTS.CORE.CONNECT, async (socket: Socket) => {
-            await this.handleEvents(socket);
+                    handlers[eventName] ? handlers[eventName](data, acknowledgement, socket, eventName) : (() => {
+                        socket.emit('fail', makeResponse({
+                            msg: 'not a gameinall events'
+                        }))
+                    })();
+
+                } catch(e) {
+                    socket.emit('failed', makeResponse({
+                        msg: e.message
+                    }))
+                    reject(e);
+                }
+            })
         })
     }
 }
