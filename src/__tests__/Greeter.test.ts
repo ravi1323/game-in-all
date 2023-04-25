@@ -1,9 +1,9 @@
 import { Greet } from '../index';
 import { Server } from 'http';
 
-test("Greet", () => {
+test('Greet', () => {
   expect(Greet()).toBe('Hello world!');
-})
+});
 
 // test('Redis Service', async () => {
 //   const RedisInst = new RedisClient({ production: false, host: '127.0.0.1', port: '6379' });

@@ -1,4 +1,4 @@
 export interface UserValidate {
-    valid: boolean,
-    errors?: object
+  valid: boolean;
+  errors?: object;
 }

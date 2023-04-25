@@ -1,6 +1,6 @@
 {
   "name": "gameinall",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "package for all simple multiplayer game",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

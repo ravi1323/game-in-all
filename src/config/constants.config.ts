@@ -8,7 +8,7 @@ export const CONSTANTS = {
       CUSTOM: {
         TEST: 'TEST',
         FAIL: 'FAIL',
-        SIGNUP: 'SIGNUP'
+        SIGNUP: 'SIGNUP',
       },
     },
   },
