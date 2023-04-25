@@ -49,7 +49,6 @@ export class Game {
       this.IO = socketServer.getIO();
 
       this.IO.on(CONSTANTS.SOCKET.EVENTS.CORE.CONNECT, async (socket: Socket) => {
-        console.log(`new connection : ${socket.id}`)
         const handlers = {};
 
         handlers[`${CONSTANTS.SOCKET.EVENTS.CUSTOM.SIGNUP}`] = async (data, acknowledgement, socketI, eventName) =>
