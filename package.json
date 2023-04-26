@@ -1,6 +1,6 @@
 {
   "name": "gameinall",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "package for all simple multiplayer game",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -13,7 +13,7 @@
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",
     "version": "npm run format && git add -A src",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push origin HEAD:master && git push origin HEAD:master --tags"
   },
   "repository": {
     "type": "git",
