@@ -1,6 +1,6 @@
 export interface NewUser {
-  deviceId: string, 
-  name: string
+  deviceId: string;
+  name: string;
 }
 export interface Validation {
   valid: boolean;
@@ -8,11 +8,11 @@ export interface Validation {
 }
 
 export interface UserErrorInterface {
-  name: string[],
-  deviceId: string[]
+  name: string[];
+  deviceId: string[];
 }
 
 export interface Password {
-  hash: string,
-  salt: string
+  hash: string;
+  salt: string;
 }

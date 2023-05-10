@@ -30,8 +30,8 @@ export class Game {
     redisHost,
     redisPort,
     redisDB,
-    redisPassword
-  } : {
+    redisPassword,
+  }: {
     mProduction: boolean;
     httpPort: number;
     playersPerMatch: number;
@@ -53,7 +53,13 @@ export class Game {
     if (mProduction && (!key || key === '' || !cert || cert === ''))
       throw new Error(`'{key}' & '{cert}' is required on production.`);
     else {
-      this.redisClient = new RedisClient({ production: mProduction, host: redisHost, port: redisPort, db: redisDB, password: redisPassword});
+      this.redisClient = new RedisClient({
+        production: mProduction,
+        host: redisHost,
+        port: redisPort,
+        db: redisDB,
+        password: redisPassword,
+      });
 
       this.httpServer = mProduction
         ? new HttpServer({ production: mProduction, port: httpPort, key, cert })
@@ -62,11 +68,11 @@ export class Game {
       this.IO = socketServer.getIO();
 
       this.IO.on(CONSTANTS.SOCKET.EVENTS.CORE.CONNECT, async (socket: Socket) => {
-        var handlers = {};
+        const handlers = {};
 
         handlers[`${CONSTANTS.SOCKET.EVENTS.CUSTOM.SIGNUP}`] = async (data, acknowledgement, socketI, eventName) =>
           await this.signup(data, acknowledgement, socketI, eventName);
-        handlers[`${CONSTANTS.SOCKET.EVENTS.CUSTOM.JOIN_DEBUG}`] = async (data, acknowledgement, socketI, eventName) => 
+        handlers[`${CONSTANTS.SOCKET.EVENTS.CUSTOM.JOIN_DEBUG}`] = async (data, acknowledgement, socketI, eventName) =>
           await this.joinDebug(data, acknowledgement, socketI, eventName);
 
         await socketServer.handleEvents(socket, handlers);
@@ -97,7 +103,7 @@ export class Game {
           sendDebug(this.IO, socket, {
             ...isValid.errors,
             en: eventName,
-          })
+          });
           resolve();
         } else {
           const user = await getUser(this.redisClient, data.deviceId);
@@ -111,12 +117,12 @@ export class Game {
             );
 
             sendDebug(this.IO, socket, {
-              msg: `new signup came in socketId : ${socket.id} & userData : ${JSON.stringify(user)}`
-            })
+              msg: `new signup came in socketId : ${socket.id} & userData : ${JSON.stringify(user)}`,
+            });
           } else {
             await createNewUser(this.redisClient, {
               deviceId: data.deviceId,
-              name: data.name
+              name: data.name,
             });
 
             socket.emit(
@@ -127,14 +133,13 @@ export class Game {
             );
 
             sendDebug(this.IO, socket, {
-              msg: `new signup came in socketId : ${socket.id} & userData : ${JSON.stringify(user)}`
-            })
+              msg: `new signup came in socketId : ${socket.id} & userData : ${JSON.stringify(user)}`,
+            });
           }
 
           resolve();
         }
       } catch (e) {
-
         if (acknowledgement)
           acknowledgement(
             makeResponse({
@@ -151,65 +156,75 @@ export class Game {
         );
 
         sendDebug(this.IO, socket, {
-          msg: `signup failed : ${e.message}`
-        })
+          msg: `signup failed : ${e.message}`,
+        });
         reject(e);
       }
     });
   }
 
-  async playGame(data: any, acknowledgement: any, socket: Socket, eventName: string) : Promise<void> {
+  async playGame(data: any, acknowledgement: any, socket: Socket, eventName: string): Promise<void> {
     /**
      * validate : deviceId
      */
     const isValid = validateSignupPayload(data);
 
     if (!isValid.valid) {
-      socket.emit(CONSTANTS.SOCKET.EVENTS.CUSTOM.PLAY_GAME_FAIL) // TODO: left here...
+      socket.emit(CONSTANTS.SOCKET.EVENTS.CUSTOM.PLAY_GAME_FAIL); // TODO: left here...
     }
   }
 
-  async joinDebug(data: any, acknowledgement: any, socket: Socket, eventName: string) : Promise<void> {
+  async joinDebug(data: any, acknowledgement: any, socket: Socket, eventName: string): Promise<void> {
     return new Promise((resolve, reject) => {
       try {
-        const isValid : Validation = validateJoinDebug(data);
+        const isValid: Validation = validateJoinDebug(data);
 
         if (!isValid.valid) {
-
-          if (acknowledgement) 
-            acknowledgement(makeResponse({
-              ...isValid.errors
-            }))
-          socket.emit(CONSTANTS.SOCKET.EVENTS.CUSTOM.FAIL, makeResponse({
-            ...isValid.errors
-          }))
+          if (acknowledgement)
+            acknowledgement(
+              makeResponse({
+                ...isValid.errors,
+              }),
+            );
+          socket.emit(
+            CONSTANTS.SOCKET.EVENTS.CUSTOM.FAIL,
+            makeResponse({
+              ...isValid.errors,
+            }),
+          );
         } else {
           socket.join(CONSTANTS.SOCKET.GLOBAL_ROOMS.DEBUG);
-          if (acknowledgement) 
-          {
-            acknowledgement(makeResponse({
-              msg: `joined successfully, you'll get all debug messages from now on`
-            }))
-          } else 
-          {
-            socket.emit(CONSTANTS.SOCKET.EVENTS.CUSTOM.JOIN_DEBUG_SUCCESS, makeResponse({
-              msg: `joined successfully, you'll get all debug messages from now on`
-            }))
+          if (acknowledgement) {
+            acknowledgement(
+              makeResponse({
+                msg: `joined successfully, you'll get all debug messages from now on`,
+              }),
+            );
+          } else {
+            socket.emit(
+              CONSTANTS.SOCKET.EVENTS.CUSTOM.JOIN_DEBUG_SUCCESS,
+              makeResponse({
+                msg: `joined successfully, you'll get all debug messages from now on`,
+              }),
+            );
           }
         }
-      } catch(e) {
-        if (acknowledgement) 
-        {
-          acknowledgement(makeResponse({
-            msg: `something went wrong : ${e.message}`
-          }))
-        } else 
-        {
-          socket.emit(CONSTANTS.SOCKET.EVENTS.CUSTOM.JOIN_DEBUG_FAIL, makeResponse({
-            msg: `something went wrong : ${e.message}`
-          }))
+      } catch (e) {
+        if (acknowledgement) {
+          acknowledgement(
+            makeResponse({
+              msg: `something went wrong : ${e.message}`,
+            }),
+          );
+        } else {
+          socket.emit(
+            CONSTANTS.SOCKET.EVENTS.CUSTOM.JOIN_DEBUG_FAIL,
+            makeResponse({
+              msg: `something went wrong : ${e.message}`,
+            }),
+          );
         }
       }
-    })
+    });
   }
 }

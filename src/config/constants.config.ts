@@ -1,7 +1,7 @@
-export var CONSTANTS = {
+export const CONSTANTS = {
   GAME: {
     REQUIRED_PLAYERS: 2,
-    REQUIRED_GAME_TIME: 60000 // 1 minute -> 60 seconds -> 60000 miliseconds
+    REQUIRED_GAME_TIME: 60000, // 1 minute -> 60 seconds -> 60000 miliseconds
   },
   SOCKET: {
     EVENTS: {
@@ -23,15 +23,14 @@ export var CONSTANTS = {
       },
     },
     GLOBAL_ROOMS: {
-      DEBUG: 'DEBUG'
-    }
+      DEBUG: 'DEBUG',
+    },
   },
   USER: {
-    DB_PREFIX: 'USERS'
+    DB_PREFIX: 'USERS',
   },
   AUTH: {
     HASH: 'af30cb638386869981827e15a6bd33e4a6adc1ede47d45a2c18259835f149a53020c6427a53e8a23966ec0e0a04d2b7bc196f5ec807d3ab4747b7e8e61e901cb',
-    SALT: '1dbe7316a095968c398afa94f3acdb32840e900c0227515e283cd924131775a4'
-  }
+    SALT: '1dbe7316a095968c398afa94f3acdb32840e900c0227515e283cd924131775a4',
+  },
 };
-  
