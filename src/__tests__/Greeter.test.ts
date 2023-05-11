@@ -1,8 +1,22 @@
-import { Greet } from '../index';
-import { Server } from 'http';
+import { Game } from '../index';
 
 test('Greet', () => {
-  expect(Greet()).toBe('Hello world!');
+  try {
+    const game = new Game({
+      mProduction: false,
+      httpPort: 3000,
+      playersPerMatch: 2,
+      matchDuration: 5 * 60 * 1000,
+      minimumPlayersToPlay: 2,
+      entryFees: [100],
+      redisHost: '127.0.0.1',
+      redisPort: '6379',
+      redisDB: '1',
+      redisPassword: 'check'
+    })
+  } catch(e) {
+    console.log(e.message)
+  }
 });
 
 // test('Redis Service', async () => {

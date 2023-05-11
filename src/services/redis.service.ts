@@ -26,7 +26,8 @@ export class RedisClient {
 
       if (this.mProduction && (!password || password === '' || !db || db === '')) {
         throw new Error(`'db' & 'password' is required in production mode.`);
-      } else {
+      }
+      if (this.mProduction) {
         redisConfiguration.password = password;
         redisConfiguration.database = parseInt(db as string, 10);
       }

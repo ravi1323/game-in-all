@@ -33,7 +33,7 @@ export const isJsonable = (data): boolean => {
   }
 };
 
-export const sendDebug = (IO: Server, socket: Socket, data: any) => {
+export const sendDebug = (IO: Server, data: any) => {
   // prepare the response in string.
   if (isJsonable(data)) {
     data = makeResponse(data);
@@ -44,10 +44,11 @@ export const sendDebug = (IO: Server, socket: Socket, data: any) => {
   }
 
   // send it in the room
-  const debugRoom = IO.sockets.adapter.rooms[CONSTANTS.SOCKET.GLOBAL_ROOMS.DEBUG];
-  if (debugRoom.length > 0) {
-    IO.to(CONSTANTS.SOCKET.GLOBAL_ROOMS.DEBUG).emit(CONSTANTS.SOCKET.EVENTS.CUSTOM.DEBUG, data);
-  }
+  IO.to(CONSTANTS.SOCKET.GLOBAL_ROOMS.DEBUG).emit(CONSTANTS.SOCKET.EVENTS.CUSTOM.DEBUG, data);
+  // const debugRoom = IO.sockets.adapter.rooms[CONSTANTS.SOCKET.GLOBAL_ROOMS.DEBUG];
+  // if (debugRoom.length > 0) {
+  //   IO.to(CONSTANTS.SOCKET.GLOBAL_ROOMS.DEBUG).emit(CONSTANTS.SOCKET.EVENTS.CUSTOM.DEBUG, data);
+  // }
 };
 
 export const genPassword = (password: string): Password => {
