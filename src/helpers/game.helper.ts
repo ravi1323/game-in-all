@@ -1,4 +1,6 @@
-import { PlayerListPlayer } from "../config/interfaces.config";
+import { Redis } from "ioredis";
+import { PlayerListPlayer, Table } from "../config/interfaces.config";
+import { getPlayerGamePlay } from "./player.helper";
 
 export const findNextPlayerTurn = (playerList : PlayerListPlayer[], currentTurnId: string) => {
     let nextPlayerId = '';
@@ -11,4 +13,30 @@ export const findNextPlayerTurn = (playerList : PlayerListPlayer[], currentTurnI
     }
 
     return nextPlayerId;
+}
+
+export const remainingTimeFinder = async (redisClient: Redis, userId: string, tableGamePlay: Table) : Promise<void> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            /**
+             * find next turn
+             */
+            const nextTurn = await findNextPlayerTurn(tableGamePlay.playerList, userId);
+
+            /**
+             * get player game play data
+             */
+            let playerGamePlay = await getPlayerGamePlay(redisClient, userId);
+            if (!playerGamePlay) reject(new Error("failed getting player game data in remainingTimeFinder"));
+
+            /**
+             * logic for finding remaining time
+             */
+            let remainingTime = 0;
+
+        } catch(e) {
+            reject(e)
+        }
+    })
 }

@@ -31,7 +31,8 @@ export interface Player {
   state: string, // 'P'
   isDisconnected: boolean,
   turnCount: number,
-  colorType: string
+  colorType: string,
+  remainingTime: number
 }
 
 export interface RejoinDataErrors {
